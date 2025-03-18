@@ -1,6 +1,7 @@
 public with sharing class AccountCasesController {
 
     @AuraEnabled
+
     public static List<Case> findCasesBySubject(Id accountId, String subjectSearchTerm){
         if (accountId == null) {
             throw new AuraHandledException('L\'ID du compte est requis.');
@@ -16,6 +17,5 @@ public with sharing class AccountCasesController {
 
         return cases;
     }
-
 
 }

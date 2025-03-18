@@ -19,10 +19,20 @@ private class AccountCaseControllerTest {
     @IsTest
     static void testFindCasesBySubject() {
         Account testAccount = [SELECT Id FROM Account LIMIT 1];
-        String searchTerm = 'Test'
+        String searchTerm = 'Test';
         Test.startTest();
-        List<Cases> results = AccountCaseController.findCasesBySubject(testAccount.Id, searchTerm)
+        List<Case> results = AccountCasesController.findCasesBySubject(testAccount.Id, searchTerm);
         Test.stopTest();
-        Assert.areEqual(2, results.size(), 'Should return one or more case.')
+        Assert.areEqual(2, results.size(), 'Should return one or more case.');
+    }
+
+    @IsTest
+    static void testFindCasesBySubjectWithNoAccountId() {
+        try {
+            AccountCasesController.findCasesBySubject(null, 'Test');
+            System.assert(false, 'Expected AuraHandledException was not thrown.');
+        } catch (AuraHandledException e) {
+            System.assertEquals('L\'ID du compte est requis.', e.getMessage());
+        }
     }
 }

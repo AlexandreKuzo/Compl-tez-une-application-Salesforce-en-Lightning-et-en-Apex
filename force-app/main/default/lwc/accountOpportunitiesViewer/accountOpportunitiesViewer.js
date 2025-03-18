@@ -8,6 +8,7 @@ export default class AccountOpportunitiesViewer extends LightningElement {
     @track error = {};
     wiredResult; // on stocke le résultat de la MAJ 
 
+
     columns = [
         { label: 'Nom Opportunité', fieldName: 'Name', type: 'text' },
         { label: 'Montant', fieldName: 'Amount', type: 'currency' },
@@ -27,12 +28,11 @@ export default class AccountOpportunitiesViewer extends LightningElement {
     }
     
     handleRafraichir() {
-        console.log('🔄 Rafraîchissement lancé');
+        console.log('Rafraîchissement lancé');
         refreshApex(this.wiredResult)
-            .then(() => console.log('✅ Rafraîchissement terminé'))
-            .catch(error => console.error('❌ Erreur :', error));
+            .then(() => console.log('Rafraîchissement OK.'))
+            .catch(error => console.error('Erreur :', error));
         }
-
 
 
 }
