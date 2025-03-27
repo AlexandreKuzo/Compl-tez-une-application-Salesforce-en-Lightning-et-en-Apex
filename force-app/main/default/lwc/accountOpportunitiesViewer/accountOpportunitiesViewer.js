@@ -1,6 +1,7 @@
 import { LightningElement, api, wire, track } from 'lwc';
 import { refreshApex } from '@salesforce/apex';
 import getOpportunities from '@salesforce/apex/AccountOpportunitiesController.getOpportunities';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 export default class AccountOpportunitiesViewer extends LightningElement {
     @api recordId;
@@ -16,6 +17,17 @@ export default class AccountOpportunitiesViewer extends LightningElement {
         { label: 'Phase', fieldName: 'StageName', type: 'text' }
     ];
 
+
+    // on créé une méthode pour afficher un message aux utilisateurs pour notifier la mise à jour de l'oppty
+    showToast(title, message, variant) {
+        const event = new ShowToastEvent({
+            title: title,
+            message: message,
+            variant: variant,
+        });
+        this.dispatchEvent(event);
+    }
+
     @wire(getOpportunities, { accountId: '$recordId' })
     wiredOpportunities(result) {
         this.wiredResult = result;
@@ -30,8 +42,12 @@ export default class AccountOpportunitiesViewer extends LightningElement {
     handleRafraichir() {
         console.log('Rafraîchissement lancé');
         refreshApex(this.wiredResult)
-            .then(() => console.log('Rafraîchissement OK.'))
-            .catch(error => console.error('Erreur :', error));
+            .then(() => {console.log('Rafraîchissement OK.');
+            this.showToast('Succès', 'Données rafraîchies avec succès.', 'success'); // on affiche un message toast
+    })
+            .catch(error => {console.error('Erreur :', error);
+            this.showToast('Erreur', 'Une erreur est survenue lors du rafraîchissement des données.', 'error'); // on affiche un message toast avec erreur 
+            });
         }
 
 
