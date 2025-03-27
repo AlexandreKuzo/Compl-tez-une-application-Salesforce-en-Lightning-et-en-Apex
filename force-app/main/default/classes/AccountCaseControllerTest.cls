@@ -7,11 +7,9 @@ private class AccountCaseControllerTest {
     @TestSetup
     static void setup() {
         Account testAccount = TestDataFactory.createTestAccount();
-        insert testAccount;
-
         List<Case> testCases = new List<Case>{
-            new Case(AccountId = testAccount.Id, Subject = 'Test Case 1', Status = 'New', Priority = 'Medium'),
-            new Case(AccountId = testAccount.Id, Subject = 'Test Case 2', Status = 'New', Priority = 'High')
+            new Case(AccountId = testAccount.Id, Subject = 'Test 1', Status = 'New', Priority = 'Medium'),
+            new Case(AccountId = testAccount.Id, Subject = 'Test 2', Status = 'New', Priority = 'High')
         };
         insert testCases;
     }
@@ -32,7 +30,8 @@ private class AccountCaseControllerTest {
             AccountCasesController.findCasesBySubject(null, 'Test');
             System.assert(false, 'Expected AuraHandledException was not thrown.');
         } catch (AuraHandledException e) {
-            System.assertEquals('L\'ID du compte est requis.', e.getMessage());
+            String expectedErrorMessage = 'The account ID is required.';
+            System.assertEquals(expectedErrorMessage, e.getMessage(), 'Incorrect error message was thrown.');
         }
     }
 }
