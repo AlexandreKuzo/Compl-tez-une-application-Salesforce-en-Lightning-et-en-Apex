@@ -1,10 +1,13 @@
 public with sharing class AccountCasesController {
-
+    private static AuraHandledException newMessageException(String message) {
+        AuraHandledException e = new AuraHandledException(message);
+        e.setMessage(message);
+        return e;
+    }
     @AuraEnabled
-
     public static List<Case> findCasesBySubject(Id accountId, String subjectSearchTerm){
         if (accountId == null) {
-            throw new AuraHandledException('The account ID is required.');
+            throw newMessageException('The account ID is required.');
         }
 
         List<Case> cases = [
